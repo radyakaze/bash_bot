@@ -30,7 +30,6 @@ imdb_plugin() {
     local RESPONSE=${RESPONSE%%\"*}
 
     if [[ "$RESPONSE" = "True" ]]; then
-      echo ADA
       local MSG=$(printf "%s\n" "$IMDB_TITLE ($IMDB_YEAR)" "$IMDB_RATING | $IMDB_RUNTIME | $IMDB_GENRE" "$IMDB_PLOT" "http://imdb.com/title/$IMDB_ID")
     fi
 
