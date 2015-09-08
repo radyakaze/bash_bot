@@ -1,0 +1,21 @@
+whoami_plugin() {
+  local DOC="/whoami
+   Get the user ID for yourself and the group. Use it in a reply to get info for the sender of the original message."
+
+  local FIRST_NAME=$(printf $FIRST_NAME)
+
+  if [[ $USERNAME =~ [a-zA-Z0-9_\-] ]]; then
+    local FROM="@$USERNAME, AKA $FIRST_NAME"
+  else
+    local FROM=$FIRST_NAME
+  fi
+
+  if [[ $USER_ID = $CHAT_ID ]]; then
+    local TO="@$BOT_NAME"
+  else
+    local TO=$TITLE
+  fi
+  local MSG="You are $FROM ($USER_ID) and you are messaging $TO ($CHAT_ID)."
+
+  send_message
+}

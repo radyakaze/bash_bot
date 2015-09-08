@@ -1,0 +1,29 @@
+weather_plugin() {
+  local DOC="/weather <location>
+    Returns the current temperature and weather conditions for a specified location."
+
+  if [[ $TEXT = *[!\ ]* ]]; then
+    local WEATHER="$(curl -s "http://api.openweathermap.org/data/2.5/weather?q=${TEXT// /+}&units=metric")"
+    local CUACA=${WEATHER##*\"temp\":}
+    local CUACA=${CUACA%%,*}
+    local COUNTRY=${WEATHER##*\"country\":\"}
+    local COUNTRY=${COUNTRY%%\"*}
+    local SKY_IS=${WEATHER##*\"description\":\"}
+    local SKY_IS=${SKY_IS%%\"*}
+    local KOTA=${WEATHER##*\"name\":\"}
+    local KOTA=${KOTA%%\"*}
+    local COD=${WEATHER##*\"cod\":}
+    local COD=${COD%%\}*}
+    echo $COD
+
+    if [[ "${COD}" = 200 ]]; then
+      local MSG="$(printf "%s\n" "The temperature in $KOTA ($COUNTRY) is $CUACA °C" "Current conditions are: $SKY_IS")"
+    else
+      local MSG="Can not find weather for location: $TEXT"
+    fi
+  else
+    local MSG=$DOC
+  fi
+
+  send_message
+}

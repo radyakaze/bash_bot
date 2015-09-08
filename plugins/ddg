@@ -1,0 +1,18 @@
+ddg_plugin() {
+  local DOC="/ddg <query>
+    Performs a DuckDuckGo instant search for the given query."
+  local DISABLE_WEB_PREVIEW=false
+
+  local DDG_QUERY=${TEXT/\!/\%21}
+  local DDG_QUERY=${DDG_QUERY// /+}
+
+  if [[ ${MESSAGE:3} = *[!\ ]* ]]; then
+    local DDGET="$(curl -s -X GET "https://api.duckduckgo.com/?q=%5C$DDG_QUERY&kp=1&format=json&kp=1&no_redirect=1&no_html=1")"
+    local DDGET="${DDGET##*Redirect\":\"}"
+    local MSG="${DDGET%%\",\"DefinitionURL*}"
+  else
+    local MSG=$DOC
+ fi
+
+  send_message
+}

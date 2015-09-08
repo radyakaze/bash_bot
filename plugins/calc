@@ -1,13 +1,18 @@
-function calc() {
+calc_plugin() {
+  local DOC="/calc <expression>
+    This command solves math expressions and does conversion between common units."
 
-  if [[ ${message:5} = *[!\ ]* ]]
+  if [[ $TEXT = *[!\ ]* ]]
   then
-    msg="$(printf "%s\n" "scale=2; ${message:6}" | bc -l 2>&1)"
+    # if bc exists
+    if which bj >/dev/null 2>&1; then
+      local MSG=$(printf "%s\n" "scale=2; $TEXT" | bc -l 2>&1)
+    else
+      local MSG=$(curl -G -s --data-urlencode "expr=$TEXT" "http://api.mathjs.org/v1/")
+    fi
   else
-    msg="/calc <expression>
-    Calculator powered by bc, an arbitrary precision calculator language."
+    local MSG=$DOC
   fi
 
   send_message
-
 }

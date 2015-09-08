@@ -1,0 +1,11 @@
+about_plugin() {
+  local DOC="/about
+    Show info about bot"
+  local DISABLE_WEB_PREVIEW=false
+
+  local MSG="Based on bash_bot v0.1 by @error_log.
+  bash_bot is licensed under the GPLv3.
+  Source: https://github.com/radyakaze/bash_bot"
+
+  send_message
+}

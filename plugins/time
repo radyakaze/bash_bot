@@ -1,0 +1,25 @@
+time_plugin() {
+  local DOC="/time <location>
+    Sends the time and timezone for a given location."
+
+  if [[ $TEXT = *[!\ ]* ]]; then
+    local REQ_COORDS=$(curl -s "http://maps.googleapis.com/maps/api/geocode/json?address=${TEXT/ /+}")
+    local COORDS=${REQ_COORDS##*\"location\"}
+    local COORDS=(${COORDS%%\ \}*})
+
+    local TIME_ZONE=$(curl -s -g "https://maps.googleapis.com/maps/api/timezone/json?location=${COORDS[4]}${COORDS[7]}&timestamp=1331161200")
+    local TZ_ARRAY=${TIME_ZONE##*\"dstOffset\"\ [:]\ }
+    local TZ_ARRAY=${TZ_ARRAY//,/}
+    local TZ_ARRAY=(${TZ_ARRAY%%[}]*})
+    local TZ_NAME=${TIME_ZONE##*\"timeZoneName\"\ [:]\ \"}
+    local TZ_NAME=${TZ_NAME%%\"*}
+
+    local TIME_UTC=$(($(date -u +%s)+${TZ_ARRAY[0]}+${TZ_ARRAY[3]}))
+
+    local MSG=$(printf "%b\n" "$(date -u --date=@${TIME_UTC} "+%R\n%A, %d %B %Y \n${TZ_NAME}")")
+  else
+   local MSG=$DOC
+  fi
+
+  send_message
+}

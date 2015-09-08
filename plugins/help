@@ -1,27 +1,33 @@
-function help() {
+help_plugin() {
 
-  command="${message:6}"
-  command=${command//\//}
+  local DOC="/help [command]
+    Get list of basic information for all commands, or more detailed documentation on a specified command"
 
-  if [[ ${message:5} = *[!\ ]* ]]
-  then
-    pb_bash=$(< $0)
-    cmd_help=${pb_bash##*msg=\"\/${command}}
-    cmd_help=${cmd_help%%.\"*}
+  local COMMAND=${TEXT##*/}
 
-    msg="$(printf "%s\n" "${message:6} ${cmd_help}")"
+  if [[ $TEXT = *[!\ ]* && -f $BOT_DIR/plugins/$COMMAND ]]; then
+    local PLUGIN=$(< $BOT_DIR/plugins/$COMMAND)
+    local PLUGIN_DOC=${PLUGIN##*DOC=\"}
+    local MSG=${PLUGIN_DOC%%\"*}
   else
-    msg="Available commands:
-    - /about
-    - /calc <expression>
-    - /cuaca <location>
-    - /ddg <query>
-    - /echo <text>
-    - /help [command]
-    - /info
-    - /jam"
+    for FILE in $BOT_DIR/plugins/*; do
+      local PLUGINS=$(< $FILE)
+      local PLUGINS_DOC=${PLUGINS##*DOC=\"}
+      local PLUGINS_DOC=${PLUGINS_DOC%%\"*}
+      local NL='
+      '
+      local OUTPUT=$(echo -e "$OUTPUT
+      - ${PLUGINS_DOC%%"$NL"*}\n")
+    done
+
+    local MSG="Available commands: $OUTPUT
+    *Arguments: <required> [optional]"
+  fi
+
+  if [[ $USER_ID != $CHAT_ID ]]; then
+    local CHAT_ID=$USER_ID
+    local MESSAGE_ID=
   fi
 
   send_message
-
 }

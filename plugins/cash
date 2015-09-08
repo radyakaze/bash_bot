@@ -1,0 +1,28 @@
+cash_plugin() {
+  local DOC="/cash <from> <to> [amount]
+    Convert an amount from one currency to another.
+    Example: /cash USD IDR 1"
+  local REQ=${TEXT^^}
+  local REQ=( $REQ )
+
+  if (( ${#REQ[@]} > 1 )); then
+    local FROM=${REQ[0]}
+    local TO=${REQ[1]}
+    local AMOUNT=${REQ[2]:-1}
+
+    local CONV=$(curl -s "http://www.google.com/finance/converter?from=$FROM&to=$TO&a=$AMOUNT")
+
+    local KURS=${CONV##*'currency_converter_result>'}
+    local KURS=${KURS%%'</span'*}
+
+    if [[ ${KURS%% *} = $AMOUNT ]]; then
+      local MSG=${KURS//'<span class=bld>'/}
+    else
+      local MSG="Error"
+    fi
+  else
+    local MSG=$DOC
+  fi
+
+  send_message
+}

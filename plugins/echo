@@ -1,13 +1,12 @@
-function gema() {
+echo_plugin() {
+  local DOC="/echo <text>
+    Repeat a string."
 
- if [[ ${message:5} = *[!\ ]* ]]
- then
-   msg="${message:6}"
- else
-   msg="/echo <text>
-   Repeat a string."
- fi
+  if [[ $TEXT = *[!\ ]* ]]; then
+    local MSG=$TEXT
+  else
+    local MSG=$DOC
+  fi
 
   send_message
-
 }

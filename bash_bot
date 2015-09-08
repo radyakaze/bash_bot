@@ -1,0 +1,85 @@
+#!/bin/bash
+
+## bash_bot v0.1 by Radya
+## The Telegram bot written in bash
+## Inspired by si_kabayan (https://github.com/rizaumami/para_bot)
+
+BOT_DIR=$(dirname "$0")
+BOT_URL='https://api.telegram.org/bot'
+
+if [ ! -e $BOT_DIR/config ]; then
+  read -p 'Bot token: ' TOKEN
+  GETME=$(curl -s "$BOT_URL$TOKEN/getMe")
+  OK=${GETME#*\"ok\":}
+  OK=${OK%%,*}
+
+  if [[ $OK == false ]]; then
+    echo 'Bot token is not valid'
+    exit
+  else
+    BOT_NAME=${GETME##*\"username\":\"}
+    BOT_NAME=${BOT_NAME%%\"\}*}
+    echo -e "TOKEN'$TOKEN'\nBOT_NAME='$BOT_NAME'" > $BOT_DIR/config
+    echo 'Install Succeeded'
+  fi
+else
+  source $BOT_DIR/config
+fi
+
+API="$BOT_URL$TOKEN"
+
+# Load all plugins
+for FILE in $BOT_DIR/plugins/*; do
+  source $FILE
+done
+
+# send request to telegram api
+send_message() {
+  curl -s --data-urlencode "text=$MSG" "$API/sendMessage?chat_id=$CHAT_ID&reply_to_message_id=$MESSAGE_ID&disable_web_page_preview=${DISABLE_WEB_PREVIEW:-true}"
+}
+send_location() {
+  curl -s "$API/sendLocation?chat_id=$CHAT_ID&reply_to_message_id=$MESSAGE_ID&latitude=${LAT}&longitude=$LON"
+}
+
+# main
+echo 'Running bot..'
+
+OFFSET=0
+while true; do {
+  RES=$(curl -s "$API/getUpdates?offset=$OFFSET&timeout=30")
+
+  if (( ${#RES} > 23 )); then
+    OFFSET="${RES#*\"update_id\":}"
+    OFFSET="${OFFSET%%,*}"
+    MESSAGE_ID="${RES#*\"message_id\":}"
+    MESSAGE_ID="${MESSAGE_ID%%,*}"
+    USER_ID="${RES#*\"id\":}"
+    USER_ID="${USER_ID%%,*}"
+    FIRST_NAME="${RES#*\"first_name\":\"}"
+    FIRST_NAME="${FIRST_NAME%%\"*}"
+    USERNAME="${RES#*\"username\":\"}"
+    USERNAME="${USERNAME%%\"*}"
+    CHAT_ID="${RES##*\"chat\":\{\"id\":}"
+    CHAT_ID="${CHAT_ID%%,*}"
+    TITLE="${RES#*\"title\":\"}"
+    TITLE="${TITLE%%\"*}"
+    MESSAGE="${RES##*\"text\":\"\\\/}"
+    MESSAGE="${MESSAGE%%\"*}"
+    MESSAGE="${MESSAGE/\\/}"
+    CMD=${MESSAGE%% *}
+    CMD=${CMD/@BOT_NAME/}
+    CMD=${CMD##*/}
+    COUNT=${#CMD}
+    COUNT=$((COUNT+1))
+    TEXT=${MESSAGE:COUNT}
+
+    # next messages
+    OFFSET=$((OFFSET+1))
+
+    if [[ $OFFSET != 1 ]] || [[ $CMD = *[!\ ]* ]]; then
+      if [[ "$(type -t $CMD'_plugin')" = "function" ]]; then
+        "$CMD"_plugin
+      fi
+    fi
+  fi 
+} &>/dev/null; done
