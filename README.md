@@ -5,4 +5,4 @@ Telegram bot written in bash
 Message [@botfather](https://telegram.me/botfather) with the following text: /newbot
 
 ## License
-bash_bot is under the GPLv2 License
+bash_bot is under the GPLv3 License
