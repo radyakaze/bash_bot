@@ -1,6 +1,5 @@
 calc_plugin() {
-  local DOC="/calc <expression>
-    This command solves math expressions and does conversion between common units."
+  local DOC="/calc <expression> - This command solves math expressions and does conversion between common units."
 
   if [[ $TEXT = *[!\ ]* ]]
   then

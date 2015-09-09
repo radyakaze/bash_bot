@@ -1,6 +1,5 @@
 imdb_plugin() {
-  local DOC="/imdb <movie | TV series>
-  This function retrieves the IMDb info for a given film or television series, including the year, genre, imdb rating, runtime, and a summation of the plot."
+  local DOC="/imdb <movie | TV series> - This function retrieves the IMDb info for a given film or television series, including the year, genre, imdb rating, runtime, and a summation of the plot."
 
   if [[ $TEXT = *[!\ ]* ]]; then
     local IMDB=$(curl -G -s --data-urlencode "t=$TEXT" "http://www.imdbapi.com/")

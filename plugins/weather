@@ -1,6 +1,5 @@
 weather_plugin() {
-  local DOC="/weather <location>
-    Returns the current temperature and weather conditions for a specified location."
+  local DOC="/weather <location> - Returns the current temperature and weather conditions for a specified location."
 
   if [[ $TEXT = *[!\ ]* ]]; then
     local WEATHER="$(curl -s "http://api.openweathermap.org/data/2.5/weather?q=${TEXT// /+}&units=metric")"

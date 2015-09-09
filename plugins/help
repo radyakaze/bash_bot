@@ -1,23 +1,21 @@
 help_plugin() {
 
-  local DOC="/help [command]
-    Get list of basic information for all commands, or more detailed documentation on a specified command"
+  local DOC="/help [command] - Get list of basic information for all commands, or more detailed documentation on a specified command"
 
   local COMMAND=${TEXT##*/}
 
   if [[ $TEXT = *[!\ ]* && -f $BOT_DIR/plugins/$COMMAND ]]; then
     local PLUGIN=$(< $BOT_DIR/plugins/$COMMAND)
     local PLUGIN_DOC=${PLUGIN##*DOC=\"}
-    local MSG=${PLUGIN_DOC%%\"*}
+    local PLUGINS_DOC=${PLUGIN_DOC%%\"*}
+    local MSG=${PLUGINS_DOC// - /$'\n'}
   else
     for FILE in $BOT_DIR/plugins/*; do
-      local PLUGINS=$(< $FILE)
+      local PLUGINS=$(cat "$FILE")
       local PLUGINS_DOC=${PLUGINS##*DOC=\"}
       local PLUGINS_DOC=${PLUGINS_DOC%%\"*}
-      local NL='
-      '
       local OUTPUT=$(echo -e "$OUTPUT
-      - ${PLUGINS_DOC%%"$NL"*}\n")
+      - ${PLUGINS_DOC%% - *}\n")
     done
 
     local MSG="Available commands: $OUTPUT

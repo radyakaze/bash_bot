@@ -1,6 +1,5 @@
 loc_plugin() {
-  local DOC="/loc <location>
-   Sends location data for query, taken from Google Maps. Works for countries, cities, landmarks, etc."
+  local DOC="/loc <location> - Sends location data for query, taken from Google Maps. Works for countries, cities, landmarks, etc."
 
   if [[ $TEXT = *[!\ ]* ]]; then
     local REQ_COORDS=$(curl -s "http://maps.googleapis.com/maps/api/geocode/json?address=${TEXT/ /+}")

@@ -1,6 +1,5 @@
 whoami_plugin() {
-  local DOC="/whoami
-   Get the user ID for yourself and the group. Use it in a reply to get info for the sender of the original message."
+  local DOC="/whoami - Get the user ID for yourself and the group. Use it in a reply to get info for the sender of the original message."
 
   local FIRST_NAME=$(printf $FIRST_NAME)
 

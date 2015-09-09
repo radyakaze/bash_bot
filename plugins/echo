@@ -1,6 +1,5 @@
 echo_plugin() {
-  local DOC="/echo <text>
-    Repeat a string."
+  local DOC="/echo <text> - Repeat a string."
 
   if [[ $TEXT = *[!\ ]* ]]; then
     local MSG=$TEXT

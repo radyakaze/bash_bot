@@ -1,6 +1,5 @@
 time_plugin() {
-  local DOC="/time <location>
-    Sends the time and timezone for a given location."
+  local DOC="/time <location> - Sends the time and timezone for a given location."
 
   if [[ $TEXT = *[!\ ]* ]]; then
     local REQ_COORDS=$(curl -s "http://maps.googleapis.com/maps/api/geocode/json?address=${TEXT/ /+}")

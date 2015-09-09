@@ -1,6 +1,5 @@
 cash_plugin() {
-  local DOC="/cash <from> <to> [amount]
-    Convert an amount from one currency to another.
+  local DOC="/cash <from> <to> [amount] - Convert an amount from one currency to another.
     Example: /cash USD IDR 1"
   local REQ=${TEXT^^}
   local REQ=( $REQ )

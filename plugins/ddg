@@ -1,6 +1,5 @@
 ddg_plugin() {
-  local DOC="/ddg <query>
-    Performs a DuckDuckGo instant search for the given query."
+  local DOC="/ddg <query> - Performs a DuckDuckGo instant search for the given query."
   local DISABLE_WEB_PREVIEW=false
 
   local DDG_QUERY=${TEXT/\!/\%21}
