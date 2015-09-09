@@ -71,7 +71,7 @@ while true; do {
     MESSAGE="${MESSAGE%%\"*}"
     MESSAGE="${MESSAGE/\\/}"
     CMD=${MESSAGE%% *}
-    CMD=${CMD/@BOT_NAME/}
+    CMD=${CMD/@$BOT_NAME/}
     CMD=${CMD##*/}
     COUNT=${#CMD}
     COUNT=$((COUNT+1))
