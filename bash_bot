@@ -44,7 +44,11 @@ send_location() {
 # main
 echo 'Running bot..'
 
-OFFSET=0
+# Skip old messages
+GET_UPDATES="$(curl "$API/getUpdates")"
+OFFSET="${GET_UPDATES##*update_id\":}"
+OFFSET="${OFFSET%%,*}"
+
 while true; do {
   RES=$(curl -s "$API/getUpdates?offset=$OFFSET&timeout=30")
 
