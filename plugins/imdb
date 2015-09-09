@@ -31,6 +31,8 @@ imdb_plugin() {
 
     if [[ "$RESPONSE" = "True" ]]; then
       local MSG=$(printf "%s\n" "$IMDB_TITLE ($IMDB_YEAR)" "$IMDB_RATING | $IMDB_RUNTIME | $IMDB_GENRE" "$IMDB_PLOT" "http://imdb.com/title/$IMDB_ID")
+    else
+      local MSG="Movie not found!"
     fi
 
   else
