@@ -45,7 +45,7 @@ send_location() {
 echo 'Running bot..'
 
 # Skip old messages
-GET_UPDATES="$(curl "$API/getUpdates")"
+GET_UPDATES="$(curl -s "$API/getUpdates")"
 OFFSET="${GET_UPDATES##*update_id\":}"
 OFFSET="${OFFSET%%,*}"
 
