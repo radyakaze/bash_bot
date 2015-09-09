@@ -19,7 +19,7 @@ if [ ! -e $BOT_DIR/config ]; then
   else
     BOT_NAME=${GETME##*\"username\":\"}
     BOT_NAME=${BOT_NAME%%\"\}*}
-    echo -e "TOKEN'$TOKEN'\nBOT_NAME='$BOT_NAME'" > $BOT_DIR/config
+    echo -e "TOKEN='$TOKEN'\nBOT_NAME='$BOT_NAME'" > $BOT_DIR/config
     echo 'Install Succeeded'
   fi
 else
