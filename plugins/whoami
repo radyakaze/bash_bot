@@ -1,7 +1,7 @@
 whoami_plugin() {
   local DOC="/whoami - Get the user ID for yourself and the group. Use it in a reply to get info for the sender of the original message."
 
-  local FIRST_NAME=$(printf $FIRST_NAME)
+  #local FIRST_NAME=$(printf $FIRST_NAME)
 
   if [[ $USERNAME =~ [a-zA-Z0-9_\-] ]]; then
     local FROM="@$USERNAME, AKA $FIRST_NAME"

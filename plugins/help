@@ -22,10 +22,10 @@ help_plugin() {
     *Arguments: <required> [optional]"
   fi
 
-  if [[ $USER_ID != $CHAT_ID ]]; then
-    local CHAT_ID=$USER_ID
-    local MESSAGE_ID=
-  fi
+  #if [[ $USER_ID != $CHAT_ID ]]; then
+  #  local CHAT_ID=$USER_ID
+  #  local MESSAGE_ID=
+  #fi
 
   send_message
 }
